@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>METHOD-REA — lizheng.ai study clone</title>
+<style>
+  body { margin: 0; font-family: "Source Serif 4", Georgia, "Times New Roman", serif; background: #f6f3ec; color: #161513; }
+  main { max-width: 48rem; margin: 0 auto; padding: 3rem 1.4rem 5rem; }
+  h1, h2 { font-family: ui-sans-serif, system-ui, "PingFang SC", sans-serif; }
+  h1 { font-size: 2rem; letter-spacing: -0.03em; }
+  h2 { margin-top: 2.4rem; font-size: 1.35rem; }
+  p, li { line-height: 1.65; }
+  code { font-size: 0.86em; background: rgba(0,0,0,.06); padding: .1em .35em; border-radius: 4px; word-break: break-all; }
+  table { border-collapse: collapse; width: 100%; font-size: 0.95rem; background: #fff; }
+  th, td { border: 1px solid #ddd6c8; padding: .55rem .65rem; vertical-align: top; }
+  th { background: #efe8d8; text-align: left; }
+  a { color: #1a1a1a; }
+  .back { font-family: ui-sans-serif, system-ui, sans-serif; font-size: 0.9rem; }
+  img.compare { width: 100%; border: 1px solid #ddd6c8; border-radius: 8px; margin: 1rem 0; }
+</style>
+</head>
+<body>
+<main>
+<p class="back"><a href="./">← 首页复刻</a> · <a href="https://www.lizheng.ai/">原站 lizheng.ai</a></p>
+<h1>这份复刻是怎么做的（REA 路径）</h1>
+<p>本仓库是 <a href="https://www.lizheng.ai/" rel="noopener">https://www.lizheng.ai/</a> 的<strong>首页级学习对照（study clone）</strong>。它<strong>不是</strong>官方站点，不宣称 1:1 还原全站，也不实现原站的提问后端、成员地图、登录或分析脚本。</p>
+<p>Evidence ID: <code>ev_39b92b0aad3fd58dac4a146c46d0369141fa7e261f06874c8d95ddc7aefa4e1c</code></p>
+<p>操作：<code>capture_browser_scenario</code>（Playwright / Chromium 139，受控回放，约 17068ms，保留 458 条网络事件）</p>
+<p>本地证据目录（完整 bundle 未整包提交）：<code>/workspace/lizheng-rea/</code></p>
+
+<h2>真正用来搭页面的证据</h2>
+<table>
+<thead><tr><th>材料</th><th>贡献</th></tr></thead>
+<tbody>
+<tr><td><code>final-dom.html</code>（约 85KB）</td><td>水合后的首页 DOM：顶栏、Hero、履历、评价、现场、超线性学院、问问立正、对话、书、公开判断、文章、加入路径与页脚。发布的 <code>index.html</code> 就是这份快照，去掉可执行脚本并改写了 URL。</td></tr>
+<tr><td><code>final.png</code></td><td>首页首屏视觉核对（森林绿 Hero、人像、<code>学点真本事，做点真东西。</code>）。</td></tr>
+<tr><td><code>assets/CityWindow-YiMFqqnz.css</code></td><td>捕获的编译样式（原 URL <code>/assets/CityWindow-YiMFqqnz.css</code>，约 177KB）。含 <code>.lz-home</code> 设计 token（<code>--lz-*</code>）、顶栏/Hero/章节布局，以及部分 Tailwind 痕迹（<code>--tw-*</code>）。</td></tr>
+<tr><td><code>assets/index-BaDp8EeZ.css</code></td><td>Geist Mono 的 <code>@font-face</code> 片段。</td></tr>
+<tr><td><code>assets/fonts-Gl0BvC6K.css</code></td><td>Noto Serif SC（700/900 分片）与 Source Serif 4 的字体表。捕获到的 woff2 走本地；未捕获的分片热链回原站 <code>/assets/...</code>。</td></tr>
+<tr><td>Noto Serif SC / Source Serif 4 <code>*.woff2</code></td><td>网络体中实际请求到的中文/西文衬线字体分片（约 36 个文件）。</td></tr>
+<tr><td><code>portrait-hero.webp</code>、现场图、评价头像</td><td>捕获到的首屏人像、DoorDash / 因果辩论 / Mike Develin / Pinterest 现场图，以及刘嘉、Wei Manfredi、Vijaye Raji、戴雨森头像。</td></tr>
+<tr><td>嘉宾头像、书封、Jev 视频封面等</td><td>水合 DOM 引用、但 17 秒捕获窗口里没有落下文件体；构建时向原站静态路径补抓或热链，并确认 HTTP 200。</td></tr>
+<tr><td><code>a11y.json</code> / <code>a11y-value.json</code></td><td>无障碍树：导航锚点、履历条目、评价、现场、学院功能、问答卡片、嘉宾、判断时间线等结构化清单。</td></tr>
+<tr><td><code>/api/ask-lizheng/discovery/lists</code>（捕获 JSON <code>lists</code>）</td><td>说明「别人在问什么」是客户端拉取的；本复刻<strong>只回放已水合进 DOM 的 3 张卡片</strong>，不把该 JSON 当运行时 API 执行。</td></tr>
+<tr><td><code>FINDINGS.md</code> / <code>network-index.json</code></td><td>栈信号与 URL 地图。</td></tr>
+</tbody>
+</table>
+
+<p>捕获截图（首屏，证据 <code>final.png</code>）：</p>
+<p><img class="compare" src="assets/evidence-final.png" alt="REA 捕获的 lizheng.ai 首页截图"></p>
+<p>本地回放首屏（静态服务器截图，声明条为复刻叠加）：</p>
+<p><img class="compare" src="assets/clone-local-preview.png" alt="REA study clone 本地回放首屏"></p>
+
+<h2>从捕获网络体观察到的栈信号（不是猜测）</h2>
+<ul>
+<li>Vite 资源哈希：<code>/assets/index-dce2JSrJ.js</code>、<code>index-BaDp8EeZ.css</code>、<code>CityWindow-qdGblRGF.js</code> / <code>CityWindow-YiMFqqnz.css</code>、<code>fonts-Gl0BvC6K.css</code>、<code>client-D6DYtmJw.js</code> 等</li>
+<li>React 水合 + SSR 痕迹：根节点 <code>id="root" data-ssr="true"</code>；首包 HTML 已有完整章节骨架</li>
+<li>字体：Noto Serif SC（700 / 900 分片 woff2）、Source Serif 4、Geist Variable（CityWindow CSS 引用）、Geist Mono（index CSS 引用）</li>
+<li>Vercel Insights：<code>/_vercel/insights/script.js</code>（<code>@vercel/analytics/react</code> 1.5.0）——本复刻已剥离</li>
+<li>CityWindow 社区点阵是独立 chunk（JS + CSS），画布由客户端绘制</li>
+<li>UI 信号：Sonner 吐司样式、Lucide 图标、部分 Tailwind 工具类（书区 Founding Member 条）</li>
+<li>「问问立正」发现列表接口：<code>GET /api/ask-lizheng/discovery/lists</code></li>
+</ul>
+<p>原站主 bundle 与 CityWindow / client JS <strong>已捕获但故意不随仓库分发、也不在页面上执行</strong>。本复刻是渲染后首页的静态回放，不是原站客户端的再分发。</p>
+
+<h2>REA 路径 vs「静态扫包 + 手搓」</h2>
+<p>对照方（网站复刻 bot、另一条方法）是用 Vite + React + wouter + Tailwind <strong>重新手写</strong>一套组件树，预览见 <a href="https://davidliu12-code.github.io/lizheng-ai-clone/">lizheng-ai-clone</a>。</p>
+<p>这份站点的首包 HTML 已经带 <code>data-ssr="true"</code>，所以「只存第一拍 HTML」也能拿到大部分文案和章节。但首包里还没有「别人在问什么」的具体卡片（例如捕获时的「已有945个公开问答」以及程序员转型 / 十个概念 / 怎么做自媒体等条目）——这些是水合之后由 <code>/api/ask-lizheng/discovery/lists</code> 填进 DOM 的。</p>
+<p>REA 的 <code>capture_browser_scenario</code> 会等加载走完，再导出：</p>
+<ol>
+<li><strong>水合后 DOM</strong>，章节顺序、class 名、已填入的问答卡片可以直接回放，而不用对照截图重新设计组件。</li>
+<li><strong>网络响应体</strong>，于是哈希后的编译 CSS、实际用到的字体分片、首屏人像和评价头像可以原样拷贝，而不用从计算样式反推。</li>
+<li><strong>无障碍树</strong>，用来核对导航、履历、评价、判断时间线等结构化内容。</li>
+<li><strong>截图</strong>，用来做视觉回归。</li>
+</ol>
+<p>这和「另起炉灶写一套 Tailwind 组件」相反：对照方重建观感；这里<strong>回放捕获的标记 + 捕获的 CSS</strong>，只额外加一层很薄的覆盖（声明条、URL 改写、判断列表展开、「更多」面板用页脚里已出现的路由拼出、提问等不足的交互跳回原站）。</p>
+
+<h2>URL 策略</h2>
+<ul>
+<li>已捕获的 CSS / 字体 / 图片从本地 <code>assets/</code> 提供。</li>
+<li>字体 CSS 里未落盘的 Noto / Source Serif / Geist 分片热链到 <code>https://www.lizheng.ai/assets/...</code>。</li>
+<li>DOM 引用但捕获窗口未保存的嘉宾头像、书封、现场补图，构建时向原站静态路径补抓；失败则热链并确认 200。</li>
+<li>站内子路由（<code>/guests</code>、<code>/zbs</code>、<code>/decks</code>、<code>/about</code>、<code>/collab</code>、<code>/en</code> 等）指向原站。</li>
+<li>提问、点赞、刷新问答、随机遇见成员、移动端菜单等未实现的交互跳到 <code>ask.lizheng.ai</code> / <code>city.lizheng.ai</code> / 原站首页。没有鉴权绕过，也没有利用原站 API 冒充提问后端。</li>
+</ul>
+
+<h2>已还原</h2>
+<ul>
+<li>声明条 + 方法页入口</li>
+<li>顶栏（品牌、页内锚点、EN、加入社区；「更多」用页脚路由拼出下拉）</li>
+<li>Hero：标题、导语、CTA、人像与「立正」字标</li>
+<li>履历时间线</li>
+<li>受邀机构 / 联合主办 / 同行评价</li>
+<li>现场横向 marquee（已捕获的四张现场图）</li>
+<li>超线性学院章节文案与四个入口（点阵画布为静态占位 + 「打开完整地图」）</li>
+<li>问问立正：说明、模式文案、已水合的 3 张问答卡片；提交跳转原站问答</li>
+<li>对话嘉宾网格与「还聊过」名单</li>
+<li>三本书卡片 + Founding Member 提示条</li>
+<li>公开判断时间线（折叠项可用「再看另外3条判断」展开）</li>
+<li>文章列表、三种加入路径、企业合作、页脚与社交链接</li>
+</ul>
+
+<h2>未能还原</h2>
+<ul>
+<li>原站多路由（嘉宾详情、英文站、书页、合作页、演讲资料等）——链接回原站</li>
+<li>CityWindow 两万成员点阵、按名查找、随机遇见（不运行原站 JS）</li>
+<li>问问立正的实时生成、点赞、刷新、再展开 5 条（跳转 ask.lizheng.ai）</li>
+<li>原站移动端完整菜单、滚动后顶栏着色 / Hero join 按钮显隐等仅存在于客户端脚本的行为</li>
+<li>Vercel Analytics 以及其他跟踪脚本（有意剥离）</li>
+<li>像素级 JS 入场动效（DOM 里已带 <code>rise</code> / <code>rv</code> class，但驱动脚本未执行）</li>
+</ul>
+</main>
+</body>
+</html>
